@@ -2,20 +2,38 @@
 
 const list = document.querySelector('ul');
 
-const parseSalary = (salary) => parseFloat(salary.replace(/[$,]/g, ''));
-// eslint-disable-next-line no-shadow, no-unused-vars
-const sortList = (list) => {
-  const items = Array.from(list.children);
+if (!list) {
+  // eslint-disable-next-line no-console
+  console.log('List element not found');
+} else {
+  const parseSalary = (salary) => parseFloat(salary.replace(/[$,]/g, ''));
 
-  items.sort((a, b) => {
-    const salaryA = parseSalary(a.dataset.salary);
-    const salaryB = parseSalary(b.dataset.salary);
+  const sortList = (listElem) => {
+    const items = Array.from(list.children);
 
-    return salaryB - salaryA;
-  });
+    items.sort((a, b) => {
+      const salaryA = parseSalary(a.dataset.salary);
+      const salaryB = parseSalary(b.dataset.salary);
 
-  items.forEach((item) => list.appendChild(item));
-};
+      return salaryB - salaryA;
+    });
 
-// eslint-disable-next-line no-undef
-sortList(list);
+    items.forEach((item) => list.appendChild(item));
+  };
+
+  const getEmployees = (listElement) => {
+    return Array.from(listElement.children).map((item) => ({
+      name: item.textContent.trim(),
+      position: item.dataset.position,
+      salary: parseSalary(item.dataset.salary),
+      age: parseInt(item.dataset.age, 10),
+    }));
+  };
+
+  const employes = getEmployees(list);
+
+  // Викликаємо функцію сортування
+  sortList(list);
+  // eslint-disable-next-line no-console
+  console.log(employes);
+}
